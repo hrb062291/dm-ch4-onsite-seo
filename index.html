@@ -1,0 +1,860 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>On-Site SEO — Chapter 4</title>
+<meta name="description" content="Digital Marketing Essentials, Chapter 4: how search engines index pages, how relevance is scored, how to choose and map keywords, and the quality and technical signals that decide rankings.">
+<style>
+:root{
+  --bg:#f6f7fb; --surface:#ffffff; --surface-2:#eef1f7; --ink:#0f1b2d; --muted:#56627a; --line:#dde2ec;
+  --accent:#1f5fd1; --accent-ink:#ffffff; --accent-soft:#e6eefc;
+  --teal:#0b8f7c; --teal-soft:#e3f5f2; --amber:#a5670f; --amber-soft:#fdf3e2;
+  --red:#c2410c; --red-soft:#fdece4; --purple:#6d3fc0; --purple-soft:#f0eafb;
+  --serp-link:#1a0dab; --serp-url:#4d5156;
+  --shadow:0 1px 2px rgba(15,27,45,.06),0 4px 16px rgba(15,27,45,.05);
+  --radius:14px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0d131d; --surface:#151d2a; --surface-2:#1c2636; --ink:#e8edf6; --muted:#9aa6bc; --line:#2a3548;
+    --accent:#6c9cf5; --accent-ink:#0d131d; --accent-soft:#1c2a45;
+    --teal:#3cc7b1; --teal-soft:#14302c; --amber:#e7a94a; --amber-soft:#33281a;
+    --red:#f08a5d; --red-soft:#3a2219; --purple:#a988ec; --purple-soft:#2a2240;
+    --serp-link:#8ab4f8; --serp-url:#bdc1c6;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0d131d; --surface:#151d2a; --surface-2:#1c2636; --ink:#e8edf6; --muted:#9aa6bc; --line:#2a3548;
+  --accent:#6c9cf5; --accent-ink:#0d131d; --accent-soft:#1c2a45;
+  --teal:#3cc7b1; --teal-soft:#14302c; --amber:#e7a94a; --amber-soft:#33281a;
+  --red:#f08a5d; --red-soft:#3a2219; --purple:#a988ec; --purple-soft:#2a2240;
+  --serp-link:#8ab4f8; --serp-url:#bdc1c6;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+h1,h2,h3,h4{line-height:1.2;margin:0 0 .5em}
+h2{font-size:1.75rem;letter-spacing:-.01em}
+h3{font-size:1.15rem;margin-top:1.6em}
+p{margin:0 0 1em}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.88em;background:var(--surface-2);padding:1px 6px;border-radius:5px}
+.wrap{max-width:980px;margin:0 auto;padding:0 20px}
+/* nav */
+nav.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav.top .wrap{display:flex;align-items:center;gap:6px;height:54px;overflow-x:auto;scrollbar-width:none}
+nav.top .wrap::-webkit-scrollbar{display:none}
+nav.top a{white-space:nowrap;text-decoration:none;color:var(--muted);font-size:.88rem;padding:6px 10px;border-radius:8px}
+nav.top a:hover{background:var(--surface-2);color:var(--ink)}
+nav.top a.brand{font-weight:700;color:var(--ink);margin-right:6px}
+#themeBtn{margin-left:auto;flex:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;width:34px;height:34px;cursor:pointer;font-size:1rem}
+/* hero */
+header.hero{padding:56px 0 28px}
+.eyebrow{font-size:.8rem;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);font-weight:700;margin-bottom:10px}
+.hero h1{font-size:clamp(2.1rem,5vw,3.2rem);letter-spacing:-.02em;margin-bottom:14px}
+.hero p.lead{font-size:1.15rem;color:var(--muted);max-width:720px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.chip{display:inline-flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:.88rem;text-decoration:none;color:var(--ink)}
+.chip .dot{width:8px;height:8px;border-radius:50%;background:var(--accent)}
+/* sections */
+section{padding:44px 0;border-top:1px solid var(--line)}
+.kicker{font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:700;margin-bottom:6px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.card h4{margin-bottom:6px;font-size:1rem}
+.card p:last-child,.card ul:last-child{margin-bottom:0}
+.card.tint-blue{background:var(--accent-soft);border-color:transparent;box-shadow:none}
+.card.tint-teal{background:var(--teal-soft);border-color:transparent;box-shadow:none}
+.card.tint-purple{background:var(--purple-soft);border-color:transparent;box-shadow:none}
+.card.tint-amber{background:var(--amber-soft);border-color:transparent;box-shadow:none}
+ul.clean{padding-left:1.1em;margin:0 0 1em}
+ul.clean li{margin:.2em 0}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:2px 8px;border-radius:6px;background:var(--surface-2);color:var(--muted)}
+.callout{border-left:4px solid var(--amber);background:var(--amber-soft);padding:14px 18px;border-radius:0 12px 12px 0;margin:18px 0}
+.callout b.lbl{color:var(--amber);text-transform:uppercase;font-size:.75rem;letter-spacing:.08em;display:block;margin-bottom:4px}
+.callout ul{margin:.3em 0 0;padding-left:1.1em}
+.keyidea{border-left:4px solid var(--accent);background:var(--accent-soft);padding:14px 18px;border-radius:0 12px 12px 0;margin:18px 0;font-weight:500}
+.case{border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);overflow:hidden;box-shadow:var(--shadow);margin:18px 0}
+.case .head{padding:12px 20px;background:var(--surface-2);display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.case .head strong{font-size:1.02rem}
+.case .body{padding:18px 20px}
+/* steps */
+ol.steps{list-style:none;padding:0;margin:0;counter-reset:s;display:grid;gap:8px}
+ol.steps li{counter-increment:s;display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 14px}
+ol.steps li::before{content:counter(s);flex:none;width:26px;height:26px;border-radius:50%;background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:.85rem;display:grid;place-items:center}
+/* pipeline */
+.pipe{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch;margin:14px 0}
+.pipe .st{flex:1 1 130px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;box-shadow:var(--shadow);position:relative}
+.pipe .st b{display:block;font-size:.95rem;margin-bottom:2px}
+.pipe .st span{font-size:.84rem;color:var(--muted)}
+.pipe .st.hot{background:var(--accent-soft);border-color:var(--accent)}
+.pipe .st .n{font-size:.7rem;font-weight:800;color:var(--accent);letter-spacing:.08em}
+/* bars */
+.bars{display:grid;gap:8px}
+.bar{display:grid;grid-template-columns:220px 1fr 44px;align-items:center;gap:10px;font-size:.9rem}
+.bar .track{height:14px;background:var(--surface-2);border-radius:7px;overflow:hidden}
+.bar .fill{height:100%;background:var(--accent);border-radius:7px}
+.bar .fill.alt{background:var(--teal)}
+.bar b{text-align:right;font-variant-numeric:tabular-nums}
+/* widget */
+.widget{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);margin:20px 0}
+.widget h3{margin-top:0}
+.widget .sub{color:var(--muted);font-size:.92rem;margin-top:-4px}
+select,input[type=number],input[type=text]{font:inherit;background:var(--surface-2);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 8px;width:100%}
+button.btn{font:inherit;font-weight:600;border:0;background:var(--accent);color:var(--accent-ink);padding:9px 16px;border-radius:9px;cursor:pointer}
+button.ghost{font:inherit;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:8px 14px;border-radius:9px;cursor:pointer}
+.result{margin-top:14px;padding:14px;border-radius:10px;background:var(--surface-2)}
+.meter{height:16px;background:var(--line);border-radius:8px;overflow:hidden;margin:6px 0}
+.meter div{height:100%;background:linear-gradient(90deg,var(--teal),var(--accent));transition:width .25s}
+.meter.warn div{background:var(--red)}
+.big{font-size:1.6rem;font-weight:800;font-variant-numeric:tabular-nums}
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
+.win{color:var(--teal);font-weight:700}
+.lose{color:var(--red);font-weight:700}
+/* two-col does/doesn't */
+.yesno{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.yesno .no{background:var(--red-soft);border-radius:12px;padding:14px 16px}
+.yesno .yes{background:var(--teal-soft);border-radius:12px;padding:14px 16px}
+.yesno h4{margin-bottom:6px}
+/* timeline */
+.timeline{position:relative;padding-left:22px;margin:8px 0}
+.timeline::before{content:"";position:absolute;left:6px;top:4px;bottom:4px;width:2px;background:var(--line)}
+.timeline div{position:relative;margin-bottom:12px}
+.timeline div::before{content:"";position:absolute;left:-21px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--accent);border:2px solid var(--surface)}
+.timeline b{display:block;font-size:.82rem;color:var(--muted)}
+/* opts */
+.opts{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 14px}
+.opts button{font:inherit;font-size:.9rem;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:7px 12px;border-radius:999px;cursor:pointer}
+.opts button[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+/* index widget */
+.docs{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.doc{background:var(--surface-2);border-radius:10px;padding:12px 14px;font-size:.9rem}
+.doc .id{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.78rem;color:var(--muted)}
+.doc mark{background:var(--amber-soft);color:var(--amber);font-weight:700;border-radius:3px;padding:0 2px}
+.doc.match{outline:2px solid var(--teal)}
+/* keyword map */
+.kmap td select{min-width:150px}
+.kmap tr.ok td:first-child{border-left:4px solid var(--teal)}
+.kmap tr.bad td:first-child{border-left:4px solid var(--red)}
+.kmap .fb{font-size:.84rem;color:var(--muted);margin-top:4px}
+/* serp preview */
+.serp{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;font-family:Arial,Helvetica,sans-serif;max-width:640px}
+.serp .site{display:flex;gap:10px;align-items:center;margin-bottom:4px}
+.serp .fav{width:26px;height:26px;border-radius:50%;background:var(--surface-2);display:grid;place-items:center;font-size:.75rem;font-weight:700;color:var(--muted)}
+.serp .nm{font-size:.88rem;line-height:1.2}
+.serp .url{font-size:.78rem;color:var(--serp-url)}
+.serp .t{color:var(--serp-link);font-size:1.25rem;line-height:1.3;margin:4px 0}
+.serp .d{color:var(--muted);font-size:.9rem;line-height:1.5}
+.serp .d b{color:var(--ink)}
+.len{display:grid;grid-template-columns:120px 1fr 80px;gap:10px;align-items:center;font-size:.86rem;margin:4px 0}
+.len b{text-align:right;font-variant-numeric:tabular-nums}
+.field{margin:10px 0}
+.field label{display:block;font-size:.85rem;font-weight:600;margin-bottom:4px}
+/* quiz */
+.q{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:12px 0}
+.q p.stem{font-weight:600;margin-bottom:10px}
+.q .choices{display:grid;gap:8px}
+.q button.c{font:inherit;text-align:left;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);padding:9px 12px;border-radius:9px;cursor:pointer}
+.q button.c:disabled{cursor:default}
+.q button.c.right{background:var(--teal-soft);border-color:var(--teal);font-weight:600}
+.q button.c.wrong{background:var(--red-soft);border-color:var(--red)}
+.q .exp{display:none;margin-top:10px;font-size:.92rem;color:var(--muted)}
+.q.done .exp{display:block}
+.score{position:sticky;bottom:12px;display:flex;gap:12px;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 16px;box-shadow:var(--shadow);margin-top:16px}
+footer{padding:36px 0 60px;color:var(--muted);font-size:.85rem;border-top:1px solid var(--line)}
+@media (max-width:600px){
+  .yesno{grid-template-columns:1fr}
+  .bar{grid-template-columns:1fr 40px}.bar span{grid-column:1/-1;font-size:.84rem}
+  .len{grid-template-columns:90px 1fr 64px}
+  section{padding:34px 0}
+  .kmap td select{min-width:120px}
+}
+</style>
+</head>
+<body>
+
+<nav class="top" aria-label="Chapter sections">
+  <div class="wrap">
+    <a class="brand" href="#top">Ch 4</a>
+    <a href="#engine">How search works</a>
+    <a href="#relevance">Relevance</a>
+    <a href="#keywords">Keywords</a>
+    <a href="#mapping">Mapping</a>
+    <a href="#quality">Quality</a>
+    <a href="#technical">Technical</a>
+    <a href="#local">Local</a>
+    <a href="#updates">Updates</a>
+    <a href="#components">5 Components</a>
+    <a href="#nordstrom">Nordstrom</a>
+    <a href="#serp">Search result</a>
+    <a href="#exercise">Exercise</a>
+    <a href="#quiz">Quiz</a>
+    <button id="themeBtn" type="button" aria-label="Toggle light or dark theme" title="Toggle theme">◐</button>
+  </div>
+</nav>
+
+<div class="wrap" id="top">
+<header class="hero">
+  <div class="eyebrow">Digital Marketing · Chapter 4</div>
+  <h1>On-Site SEO</h1>
+  <p class="lead">On-site SEO is everything you control on your own website. This chapter shows how a search engine reads a page, how it decides a page is relevant, and what you can change so the right pages rank for the right words. Earning links from other sites (off-site SEO) is Chapter 5.</p>
+  <p style="font-weight:600;margin:18px 0 4px">Learning objectives</p>
+  <p>By the end of this chapter you should be able to:</p>
+  <div class="grid g2" style="margin-top:8px">
+    <div class="card tint-blue"><h4>1 · Choose keywords</h4><p>Identify the keywords most worth targeting for a website.</p></div>
+    <div class="card tint-teal"><h4>2 · Improve relevance</h4><p>Suggest specific changes that make a page more relevant for its target keyword.</p></div>
+    <div class="card tint-purple"><h4>3 · Improve quality signals</h4><p>Suggest site changes that make search engines trust the site more.</p></div>
+    <div class="card tint-amber"><h4>4 · Find technical problems</h4><p>Spot technical issues that could be holding back a site's organic rankings.</p></div>
+  </div>
+</header>
+</div>
+
+<!-- ENGINE -->
+<section id="engine">
+<div class="wrap">
+  <div class="kicker">Chapter review · Part 1</div>
+  <h2>How a search engine works</h2>
+  <p>The original Google research paper by Sergey Brin and Larry Page described the parts of a search engine. The technology has changed a lot since then, but the basic flow still holds, and it explains why on-site SEO works the way it does.</p>
+
+  <div class="pipe">
+    <div class="st"><div class="n">STEP 1</div><b>Crawl</b><span>A URL server keeps a list of pages to visit. Crawlers follow links to find new and updated pages.</span></div>
+    <div class="st"><div class="n">STEP 2</div><b>Store</b><span>Each page's HTML is saved in a repository, a stored copy of the web.</span></div>
+    <div class="st hot"><div class="n">STEP 3</div><b>Index</b><span>Each page is turned into a "hit list": which words appear, where, and how prominently.</span></div>
+    <div class="st hot"><div class="n">STEP 4</div><b>Sort</b><span>Hit lists are re-sorted by word, so Google can find every page that uses a word.</span></div>
+    <div class="st"><div class="n">STEP 5</div><b>Rank</b><span>For a search, Google scores each matching page for relevance and authority, then combines them.</span></div>
+  </div>
+
+  <div class="grid g2">
+    <div class="card"><h4>Crawling has limits</h4><p>Crawlers are fast, but they can't visit every page constantly. Pages that change often get crawled more often. <b>If nothing links to a page, the crawler may never find it.</b></p></div>
+    <div class="card"><h4>What's a "hit"?</h4><p>Here, a hit is one occurrence of a word on a page, not a page view. Each hit records whether the word is capitalized, its font size and its position, for example <code>Cap: 0, font: 3, position: 173</code>.</p></div>
+  </div>
+
+  <div class="keyidea">Google doesn't store your page the way a visitor sees it. It stores which words appear, where they appear, and how prominent they are. That's why the HTML tags later in this chapter matter so much.</div>
+
+  <div class="widget" id="idxWidget">
+    <h3>Try it: from pages to an inverted index</h3>
+    <p class="sub">A list sorted by page can't answer "which pages contain this word?" So the search engine flips it: for every word, a list of pages. Type a word (or pick one) to look it up the way the index does.</p>
+    <div class="opts" id="idxOpts">
+      <button type="button" data-w="metamorphosis" aria-pressed="true">metamorphosis</button>
+      <button type="button" data-w="butterfly">butterfly</button>
+      <button type="button" data-w="kafka">kafka</button>
+      <button type="button" data-w="surfing">surfing</button>
+    </div>
+    <input type="text" id="idxInput" value="metamorphosis" aria-label="Word to look up" style="max-width:320px">
+    <div class="docs" id="idxDocs" style="margin-top:14px"></div>
+    <div class="result" id="idxOut"></div>
+  </div>
+
+  <h3>How links are used</h3>
+  <div class="grid g4">
+    <div class="card"><h4>Crawling</h4><p>Links are how crawlers find pages.</p></div>
+    <div class="card"><h4>Listing pages</h4><p>Every link found adds a page (docID) to the list.</p></div>
+    <div class="card"><h4>Relevance</h4><p>The clickable words of a link (anchor text) describe the page it points to.</p></div>
+    <div class="card"><h4>Authority</h4><p>Links from other sites act like votes. This is the idea behind PageRank.</p></div>
+  </div>
+
+  <div class="keyidea">Ranking = relevance × authority. This chapter is about <em>relevance</em> and site quality. Chapter 5 covers <em>authority</em> (links).</div>
+
+  <div class="callout"><b class="lbl">What changed since the textbook</b>
+    <ul>
+      <li>Google removed the public "Cached" link from search results in 2024. To see how Google sees one of your pages, use the <b>URL Inspection</b> tool in Google Search Console.</li>
+      <li>The textbook says PageRank is "no longer used." What Google retired in 2016 was the public PageRank score in its toolbar. Google has said PageRank is still one of many signals, and link-based signals still matter.</li>
+    </ul>
+  </div>
+</div>
+</section>
+
+<!-- RELEVANCE -->
+<section id="relevance">
+<div class="wrap">
+  <div class="kicker">Chapter review · Part 2</div>
+  <h2>Calculating relevance</h2>
+  <p>When someone searches "metamorphosis," Google finds every page containing that word and gives each one a relevance score. In the simplified model from the textbook, each hit is weighted by <em>where</em> the word appears.</p>
+
+  <div class="grid g2">
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Hit type</th><th class="num">Weight</th></tr></thead>
+        <tbody>
+          <tr><td>URL</td><td class="num">100</td></tr>
+          <tr><td>Title tag</td><td class="num">100</td></tr>
+          <tr><td>Anchor text</td><td class="num">90</td></tr>
+          <tr><td>Plain text, large font</td><td class="num">60</td></tr>
+          <tr><td>Plain text, medium font</td><td class="num">30</td></tr>
+          <tr><td>Plain text, small font</td><td class="num">10</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card tint-blue">
+      <h4>The lesson of the weights</h4>
+      <p>One appearance in the URL or title tag is worth ten appearances in small body text. <b>Where a word appears matters more than how many times it appears.</b></p>
+      <p>Two Wikipedia pages compete for "metamorphosis": the biology article (<code>/wiki/Metamorphosis</code>) and Kafka's novella (<code>/wiki/The_Metamorphosis</code>). Use the calculator below to score them.</p>
+    </div>
+  </div>
+
+  <div class="widget" id="relWidget">
+    <h3>Try it: score two pages for "metamorphosis"</h3>
+    <p class="sub">The hit counts come from the textbook example. Edit any number, or try stuffing the second page with hidden keywords. Then switch count-weights on to see how search engines stop that trick.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Hit type</th><th class="num">Weight</th><th class="num">Metamorphosis</th><th class="num">The_Metamorphosis</th></tr></thead>
+        <tbody id="relBody"></tbody>
+        <tfoot><tr><th>Relevance score</th><th></th><th class="num big" id="relA">—</th><th class="num big" id="relB">—</th></tr></tfoot>
+      </table>
+    </div>
+    <div class="opts" style="margin-top:14px" id="relMode">
+      <button type="button" data-m="raw" aria-pressed="true">Raw count (no limits)</button>
+      <button type="button" data-m="cw">With count-weights</button>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="ghost" id="relStuff" type="button">Stuff 300 hidden words into page 2</button>
+      <button class="ghost" id="relReset" type="button">Reset to textbook numbers</button>
+    </div>
+    <div class="result"><div id="relMsg" style="font-size:.92rem"></div></div>
+  </div>
+
+  <h3>Count-weights: why keyword stuffing stopped working</h3>
+  <p>Webmasters used to repeat a keyword dozens of times, sometimes in white text so visitors couldn't see it. Count-weights stop this: the first two hits of each type count fully, then each extra hit counts less, and from the ninth hit on, extra hits count nothing.</p>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Hit number</th><th class="num">1</th><th class="num">2</th><th class="num">3</th><th class="num">4</th><th class="num">5</th><th class="num">6</th><th class="num">7</th><th class="num">8</th><th class="num">9+</th></tr></thead>
+      <tbody><tr><td><b>Weight</b></td><td class="num">1</td><td class="num">1</td><td class="num">.9</td><td class="num">.7</td><td class="num">.45</td><td class="num">.2</td><td class="num">.05</td><td class="num">.01</td><td class="num">0</td></tr></tbody>
+    </table>
+  </div>
+  <div class="keyidea">With count-weights, the textbook scores become 820 vs. 751. A 1,710-point gap shrinks to 69. Beyond about five mentions, repeating a keyword adds almost nothing, and hidden text violates Google's spam policies.</div>
+
+  <h3>Multi-word searches</h3>
+  <div class="grid g2">
+    <div class="card">
+      <p>A search for <b>butterfly metamorphosis</b> is scored three ways:</p>
+      <ul class="clean"><li>"butterfly"</li><li>"metamorphosis"</li><li>the phrase "butterfly metamorphosis"</li></ul>
+    </div>
+    <div class="card tint-teal">
+      <h4>Why this matters</h4>
+      <p>Far fewer pages match the whole phrase, so there's less competition. <b>It's much easier to rank for multi-word ("long-tail") searches</b>, which is where new and small sites can actually win.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- KEYWORDS -->
+<section id="keywords">
+<div class="wrap">
+  <div class="kicker">Chapter review · Part 3</div>
+  <h2>Keyword usage and choosing keywords</h2>
+  <p>Look at Wikipedia's "Surfing" article. The word appears in the URL, the title, the main heading, bold text in the first sentence, image captions and the links pointing to the page. Wikipedia never forces it in. It's everywhere because the page is really about surfing.</p>
+
+  <h3>The six places a keyword should appear</h3>
+  <div class="grid g3">
+    <div class="card"><span class="tag">1</span><h4 style="margin-top:8px">URL</h4><p>The page address, e.g. <code>/kids/girls-clothing/activewear</code>.</p></div>
+    <div class="card"><span class="tag">2</span><h4 style="margin-top:8px">Title tag</h4><p>The <code>&lt;title&gt;</code> in the HTML. It's the blue headline in search results.</p></div>
+    <div class="card"><span class="tag">3</span><h4 style="margin-top:8px">Header tags</h4><p>Headings like <code>&lt;h1&gt;</code> and <code>&lt;h2&gt;</code>. Each page should have one clear H1.</p></div>
+    <div class="card"><span class="tag">4</span><h4 style="margin-top:8px">Main content</h4><p>The body text. Natural wording beats forced repetition.</p></div>
+    <div class="card"><span class="tag">5</span><h4 style="margin-top:8px">Alt text</h4><p>The text description of an image. It helps screen readers and image search.</p></div>
+    <div class="card"><span class="tag">6</span><h4 style="margin-top:8px">Anchor text</h4><p>The clickable words of a link pointing to the page, including menu links.</p></div>
+  </div>
+
+  <h3>Four criteria for choosing keywords</h3>
+  <p>In class you'll practice with the <b>Alta Electronics</b> case. Use these four tests on every candidate keyword:</p>
+  <div class="grid g4">
+    <div class="card tint-blue"><h4>Relevance</h4><p>Does the page actually satisfy the searcher? Traffic for the wrong word just produces visitors who leave.</p></div>
+    <div class="card tint-teal"><h4>Traffic</h4><p>How many people search for it each month?</p></div>
+    <div class="card tint-purple"><h4>Competition</h4><p>How many strong sites already target it?</p></div>
+    <div class="card tint-amber"><h4>Current ranking</h4><p>Moving from #11 to #5 is much cheaper than moving from #80 to #5.</p></div>
+  </div>
+  <div class="keyidea">Relevance comes first. A high-volume keyword you can't satisfy is worth less than a modest one you can.</div>
+</div>
+</section>
+
+<!-- MAPPING -->
+<section id="mapping">
+<div class="wrap">
+  <div class="kicker">Chapter review · Part 4</div>
+  <h2>Keyword mapping</h2>
+  <p>A keyword map assigns a target keyword to each page of a site. It follows the site's structure: broad terms at the top, specific terms further down.</p>
+  <ol class="steps">
+    <li><span><b>One term per page.</b> If two pages target the same term, they compete with each other. This is called <em>keyword cannibalization</em>.</span></li>
+    <li><span><b>Relevant, high volume, low competition.</b> The best terms meet all three tests.</span></li>
+    <li><span><b>"Fat head" terms go higher up.</b> Broad, high-volume terms belong on the homepage and category pages. Specific "long-tail" terms belong on product pages.</span></li>
+  </ol>
+
+  <div class="widget" id="mapWidget">
+    <h3>Try it: map keywords for an office furniture store</h3>
+    <p class="sub">The store sells desks, chairs and filing cabinets. For each keyword, choose where it belongs, then check your map. Volumes are monthly searches (minimum–maximum). There's more than one defensible answer for some rows.</p>
+    <div class="tablewrap kmap">
+      <table>
+        <thead><tr><th>Keyword</th><th>Monthly searches</th><th>Where does it go?</th></tr></thead>
+        <tbody id="mapBody"></tbody>
+      </table>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
+      <button class="btn" id="mapCheck" type="button">Check my map</button>
+      <button class="ghost" id="mapShow" type="button">Show a suggested map</button>
+      <button class="ghost" id="mapReset" type="button">Reset</button>
+    </div>
+    <div class="result" id="mapOut">Make your choices, then press <b>Check my map</b>.</div>
+  </div>
+  <div class="callout"><b class="lbl">Notice what's missing</b> This data has no competition numbers, and each volume range is ten times wide. Real keyword tools (such as Google Keyword Planner, Semrush or Ahrefs) give tighter volume estimates and a difficulty score. You need both to make a good decision.</div>
+</div>
+</section>
+
+<!-- QUALITY -->
+<section id="quality">
+<div class="wrap">
+  <div class="kicker">Chapter review · Part 5</div>
+  <h2>Quality signals</h2>
+  <p>Relevance tells Google a page is <em>about</em> the search. Quality signals tell Google whether the page is <em>worth</em> showing.</p>
+  <div class="grid g3">
+    <div class="card"><h4>The 'Back' button</h4><p>If searchers click your result and quickly return to the results page, that suggests your page missed. Testimony in the U.S. antitrust trial confirmed that Google uses click data in ranking.</p></div>
+    <div class="card"><h4>Meta description</h4><p>The summary under your result. It doesn't change your rank directly, but it changes how many people click.</p></div>
+    <div class="card"><h4>Speed</h4><p>Slow pages lose visitors. Google measures page experience with <b>Core Web Vitals</b>: loading (LCP), responsiveness (INP) and visual stability (CLS).</p></div>
+    <div class="card"><h4>Original content</h4><p>Copying text from other sites, including manufacturer descriptions, gives Google no reason to prefer your page.</p></div>
+    <div class="card"><h4>Fresh content</h4><p>Regular updates give crawlers a reason to return and show the site is active.</p></div>
+    <div class="card"><h4>Quantity and quality</h4><p>Enough content to answer the question fully, written for people rather than for search engines.</p></div>
+  </div>
+  <div class="keyidea">Most quality signals come down to one question: did the searcher's search end on your page?</div>
+</div>
+</section>
+
+<!-- TECHNICAL -->
+<section id="technical">
+<div class="wrap">
+  <div class="kicker">Chapter review · Part 6</div>
+  <h2>Technical problems</h2>
+  <p>Technical problems don't make you rank. They stop you from ranking. Check for these first, because no amount of good content fixes a page Google can't find or trust.</p>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Problem</th><th>What it means</th><th>How to check or fix</th></tr></thead>
+      <tbody>
+        <tr><td><b>Orphan pages</b></td><td>No other page links to them, so crawlers can't find them.</td><td>Link every important page from a menu, category page or related page.</td></tr>
+        <tr><td><b>Past abuses</b></td><td>A domain that was used for spam may carry a penalty.</td><td>Check Manual Actions in Google Search Console. Before buying a used domain, look up its history on archive.org.</td></tr>
+        <tr><td><b>XML sitemap</b></td><td>A file listing the pages you want indexed.</td><td>Create one (most site builders do it automatically) and submit it in Search Console.</td></tr>
+        <tr><td><b>Mobile usability</b></td><td>Google uses the mobile version of a site for indexing and ranking.</td><td>Test with Lighthouse or PageSpeed Insights. Make sure the mobile site has the same content as desktop.</td></tr>
+        <tr><td><b>Security</b></td><td>HTTPS is a small ranking signal, and a "hacked site" warning destroys clicks.</td><td>Use HTTPS everywhere and keep plugins and software updated.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout"><b class="lbl">What changed since the textbook</b> Google Search Console retired its Mobile Usability report in December 2023; use Lighthouse or PageSpeed Insights instead. Google finished moving to mobile-first indexing in 2024, so the mobile version of your site is now the version that counts.</div>
+</div>
+</section>
+
+<!-- LOCAL -->
+<section id="local">
+<div class="wrap">
+  <div class="kicker">Chapter review · Part 7</div>
+  <h2>Local search results</h2>
+  <p>For searches like "coffee near me," Google shows a map with a handful of businesses before the regular results. For a local business, that map can matter more than any organic ranking.</p>
+  <div class="grid g3">
+    <div class="card tint-blue"><h4>Google Business Profile</h4><p>The free listing that powers the map: hours, photos, category, website and posts. Claim it and keep it complete.</p></div>
+    <div class="card tint-teal"><h4>NAP consistency</h4><p><b>N</b>ame, <b>A</b>ddress and <b>P</b>hone should be identical everywhere: your site, Yelp, directories and social profiles.</p></div>
+    <div class="card tint-purple"><h4>Customer reviews</h4><p>The number of reviews, the ratings and your responses all affect local rankings and whether people choose you.</p></div>
+  </div>
+  <div class="callout"><b class="lbl">What changed since the textbook</b> Google My Business was renamed <b>Google Business Profile</b> in 2021, and profiles are now managed directly from Google Search and Maps.</div>
+</div>
+</section>
+
+<!-- UPDATES -->
+<section id="updates">
+<div class="wrap">
+  <div class="kicker">Chapter review · Part 8</div>
+  <h2>How Google evolved</h2>
+  <p>Each major update closed a shortcut that people had used to rank without deserving it.</p>
+  <div class="grid g2">
+    <div class="timeline">
+      <div><b>1998</b><strong>PageRank</strong>: ranks pages by the links pointing to them.</div>
+      <div><b>2011</b><strong>Panda</strong>: demotes thin, low-quality and copied content.</div>
+      <div><b>2012</b><strong>Penguin</strong>: demotes sites that buy or fake links.</div>
+      <div><b>2012</b><strong>Knowledge Graph</strong>: understands people, places and things, not just strings of words.</div>
+      <div><b>2013</b><strong>Hummingbird</strong>: understands what a whole query means.</div>
+    </div>
+    <div class="timeline">
+      <div><b>2014</b><strong>Pigeon</strong>: improves local results using traditional ranking signals.</div>
+      <div><b>2015</b><strong>RankBrain</strong>: machine learning for queries Google hasn't seen before.</div>
+      <div><b>2016–2024</b><strong>Mobile-first indexing</strong>: the mobile version of a site becomes the one Google indexes.</div>
+      <div><b>2019</b><strong>BERT</strong>: understands words in context (not in the textbook).</div>
+      <div><b>2022–2024</b><strong>Helpful content and AI Overviews</strong>: rewards content written for people; AI summaries now appear above many results (not in the textbook).</div>
+    </div>
+  </div>
+  <div class="keyidea">Every update punished a shortcut. The strategy that survives all of them is to be the best answer to the search.</div>
+</div>
+</section>
+
+<!-- COMPONENTS -->
+<section id="components">
+<div class="wrap">
+  <div class="kicker">Lecture</div>
+  <h2>The 5 components of SEO</h2>
+  <p>The first three describe the whole website. The last two describe individual pages.</p>
+  <div class="grid g3">
+    <div class="card"><span class="tag">Site</span><h4 style="margin-top:8px">1 · Size</h4><p>More pages means more chances to rank. <a href="https://getrest.co/" target="_blank" rel="noopener">getrest.co</a> is mostly a single scrolling page, so it has very few pages and places to put keywords. One page can only target one main keyword.</p></div>
+    <div class="card"><span class="tag">Site</span><h4 style="margin-top:8px">2 · Time</h4><p>Older sites tend to rank better, because they've had time to build links and content. If you're building a new site, launch a basic version as soon as possible.</p></div>
+    <div class="card"><span class="tag">Site</span><h4 style="margin-top:8px">3 · Popularity</h4><p>Links from other websites. SEO professionals rank this as the most important factor. Link building is Chapter 5.</p></div>
+    <div class="card"><span class="tag">Page</span><h4 style="margin-top:8px">4 · Linking</h4><p>Internal links help crawlers find pages and tell Google which pages are most important. Pages with no internal links are orphans.</p></div>
+    <div class="card"><span class="tag">Page</span><h4 style="margin-top:8px">5 · Text</h4><p>The words on a page are how Google judges its relevance to a search.</p></div>
+  </div>
+
+  <h3>Tools you can try now</h3>
+  <div class="grid g3">
+    <div class="card tint-blue"><h4><code>site:</code> search</h4><p>Search Google for <code>site:getrest.co</code> to see roughly which pages Google has indexed for a site.</p></div>
+    <div class="card tint-teal"><h4>Whois lookup</h4><p><a href="https://www.whois.com/whois/" target="_blank" rel="noopener">whois.com</a> shows when a domain was first registered.</p></div>
+    <div class="card tint-purple"><h4>Wayback Machine</h4><p><a href="https://archive.org/" target="_blank" rel="noopener">archive.org</a> shows what a website looked like at points in its history.</p></div>
+  </div>
+
+  <h3>What SEO professionals think matters most</h3>
+  <div class="card">
+    <div class="bars" id="factorBars"></div>
+    <p style="font-size:.82rem;color:var(--muted);margin:12px 0 0">Average importance rating (0–10) from a survey of SEO professionals shown in the textbook (Moz ranking-factors survey). The two link factors (shown in blue) score highest. This is expert opinion, not data from Google.</p>
+  </div>
+
+  <div class="callout"><b class="lbl">What changed since the textbook</b> Google has said that domain age by itself is <em>not</em> a ranking factor. Older sites tend to rank better because of what they've built up over time (links, content and reputation), not because of the date they were registered. The advice to launch early still holds. Also, the Search Console "Internal Links" report shown in the textbook is now called the <b>Links</b> report.</div>
+</div>
+</section>
+
+<!-- NORDSTROM -->
+<section id="nordstrom">
+<div class="wrap">
+  <div class="kicker">Learning from experts</div>
+  <h2>Nordstrom: the six places, in practice</h2>
+  <p>Nordstrom is a large retailer with a strong SEO team. The textbook checks the six keyword places on a category page (Girls' Activewear) and then on a product page (a kids' fleece pullover).</p>
+
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Place</th><th>Category page: Girls' Activewear</th><th>Product page: Kids' Fleece Pullover</th></tr></thead>
+      <tbody>
+        <tr><td><b>URL</b></td><td><code>/kids/girls-clothing/activewear</code>. The folders follow the site's structure.</td><td><code>/s/kids-fleece-pullover-little-kid-big-kid/7456464</code>. Words for people and search engines; the number is for Nordstrom's database.</td></tr>
+        <tr><td><b>Title tag</b></td><td>"Girls' Activewear Clothing | Nordstrom." Keyword first, brand last.</td><td>"Zella Girl Kids' Fleece Pullover." Brand plus product, because people search for brands.</td></tr>
+        <tr><td><b>Header (H1)</b></td><td>"Girls' Activewear Clothing," an exact match for the title.</td><td>"Kids' Fleece Pullover," the title minus the brand.</td></tr>
+        <tr><td><b>Main content</b></td><td>Almost no text, just product names and images. Natural, not forced.</td><td>The same description appears twice and is probably the manufacturer's text, which other stores use too.</td></tr>
+        <tr><td><b>Alt text</b></td><td>"Kids' Fleece Pullover (Little Kid &amp; Big Kid)." Describes the product, not the category.</td><td>"Zella Girl Kids' Fleece Pullover, Alternate, color, BLUE BROOK." Generated from product data.</td></tr>
+        <tr><td><b>Anchor text</b></td><td>"Activewear" in the Kids menu links here. Menu labels are a keyword decision.</td><td>The category page links here with "Kids' Fleece Pullover (Little Kid &amp; Big Kid)."</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="keyidea">When the URL, title, heading and links all say the same thing, Google has no doubt what the page is about. That consistency is the main lesson from Nordstrom.</div>
+
+  <h3>See it yourself</h3>
+  <div class="grid g3">
+    <div class="card"><h4>Title tag</h4><p>Right-click an empty part of a page and choose <b>View Page Source</b>. Search (Ctrl/Cmd+F) for <code>&lt;title</code>.</p></div>
+    <div class="card"><h4>Header tags</h4><p>In the same page source, search for <code>&lt;h1</code>.</p></div>
+    <div class="card"><h4>Alt text</h4><p>Right-click an image and choose <b>Inspect</b>. Look for <code>alt="…"</code> in the highlighted code.</p></div>
+  </div>
+
+  <h3>After the click</h3>
+  <div class="grid g3">
+    <div class="card tint-purple"><h4>Bounce rate</h4><p>A searcher for "womens shoes" landed on a page whose first screen showed a lipstick ad and an editorial feature, with the shoes below. Relevant page, questionable first impression. If they hit Back, Google notices.</p></div>
+    <div class="card tint-blue"><h4>Load time</h4><p>Retail pages are heavy with images and data. Run <a href="https://pagespeed.web.dev/" target="_blank" rel="noopener">PageSpeed Insights</a> on any big retailer and compare mobile with desktop.</p></div>
+    <div class="card tint-teal"><h4>Fresh content</h4><p>New products, sales and promotions, articles, reviews and Q&amp;A. <b>Reviews and Q&amp;A are free, original text written by customers</b>, which fixes the duplicate-description problem.</p></div>
+  </div>
+  <div class="callout"><b class="lbl">Heads up</b> The textbook screenshots are from a few years ago. Nordstrom's live site will look different, but the same six checks still apply.</div>
+</div>
+</section>
+
+<!-- SERP -->
+<section id="serp">
+<div class="wrap">
+  <div class="kicker">Click-through rate</div>
+  <h2>Winning the click</h2>
+  <p>Ranking gets your page seen. Three things decide whether people click it: the <b>title tag</b>, the <b>meta description</b> and the <b>URL</b>. Google sometimes rewrites titles and descriptions it thinks don't fit the search, and rich results (images, prices, ratings) come from structured data on the page.</p>
+
+  <div class="widget" id="serpWidget">
+    <h3>Try it: write a search result</h3>
+    <p class="sub">Write a title and description for a page, and see roughly how it would look in Google. Lengths are approximate: Google cuts titles at about 600 pixels (around 55–60 characters) and descriptions at about 155–160 characters on desktop.</p>
+    <div class="grid g2">
+      <div>
+        <div class="field"><label for="sKw">Target keyword</label><input type="text" id="sKw" value="girls activewear"></div>
+        <div class="field"><label for="sTitle">Title tag</label><input type="text" id="sTitle" value="Girls' Activewear Clothing | Nordstrom"></div>
+        <div class="field"><label for="sUrl">URL</label><input type="text" id="sUrl" value="https://www.nordstrom.com/browse/kids/girls-clothing/activewear"></div>
+        <div class="field"><label for="sDesc">Meta description</label><textarea id="sDesc" rows="3" style="font:inherit;background:var(--surface-2);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 8px;width:100%;resize:vertical">Find a great selection of Girls' Activewear Clothing at Nordstrom.com. Shop leggings, sports bras, hoodies and more. Free shipping and returns.</textarea></div>
+      </div>
+      <div>
+        <div class="serp" id="serpOut"></div>
+        <div style="margin-top:14px">
+          <div class="len"><span>Title</span><div class="meter" id="mT"><div></div></div><b id="lT"></b></div>
+          <div class="len"><span>Description</span><div class="meter" id="mD"><div></div></div><b id="lD"></b></div>
+        </div>
+        <div class="result" id="serpMsg" style="font-size:.9rem"></div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- EXERCISE -->
+<section id="exercise">
+<div class="wrap">
+  <div class="kicker">Practice</div>
+  <h2>Exercise: build a keyword map</h2>
+  <p>Your group will be assigned one of these sites:</p>
+  <div class="chips">
+    <a class="chip" href="https://tcfsales.com" target="_blank" rel="noopener"><span class="dot"></span>tcfsales.com</a>
+    <a class="chip" href="https://zena.net" target="_blank" rel="noopener"><span class="dot"></span>zena.net</a>
+    <a class="chip" href="https://accuratepartitions.com" target="_blank" rel="noopener"><span class="dot"></span>accuratepartitions.com</a>
+    <a class="chip" href="https://merhow.com" target="_blank" rel="noopener"><span class="dot"></span>merhow.com</a>
+  </div>
+  <div class="grid g2">
+    <div>
+      <h3 style="margin-top:.6em">Steps</h3>
+      <ol class="steps">
+        <li><span><b>Determine the navigation menu.</b> Sketch the site's structure as a tree: homepage, then category pages.</span></li>
+        <li><span><b>Choose keywords for the homepage and category pages.</b> One keyword per page.</span></li>
+        <li><span><b>Justify each choice</b> in one line using relevance, traffic, competition and current ranking.</span></li>
+      </ol>
+    </div>
+    <div class="card tint-amber">
+      <h4>Before you turn it in, check for:</h4>
+      <ul class="clean">
+        <li><b>Cannibalization:</b> are two pages targeting the same term (or near-synonyms like "desk" and "desks")?</li>
+        <li><b>Fat head placement:</b> are broad terms on the homepage and categories, not on narrow pages?</li>
+        <li><b>Menu labels:</b> does the menu text (anchor text) match each page's keyword?</li>
+        <li><b>Search volume:</b> did you check volume with a keyword tool, rather than guess?</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- QUIZ -->
+<section id="quiz">
+<div class="wrap">
+  <div class="kicker">Check yourself</div>
+  <h2>Chapter 4 quiz</h2>
+  <p>Ten questions. Pick an answer to see the explanation.</p>
+  <div id="quizBox"></div>
+  <div class="score"><span>Score: <b id="qScore">0</b> / <span id="qTotal">0</span> · answered <span id="qDone">0</span></span><button class="ghost" id="qReset" type="button">Start over</button></div>
+</div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Digital Marketing Essentials · Chapter 4: On-Site SEO. Learning page for Jessup University students, based on the Stukent chapter lecture.</p>
+    <p>Relevance weights and count-weights are the textbook's simplified model of early Google, not Google's current formula. Ranking-factor ratings are from an SEO-industry survey shown in the textbook. Search-result lengths are approximations.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  function $(id){return document.getElementById(id);}
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+
+  // theme
+  var root=document.documentElement, btn=$('themeBtn');
+  try{var saved=localStorage.getItem('dm-theme'); if(saved) root.setAttribute('data-theme',saved);}catch(e){}
+  btn.addEventListener('click',function(){
+    var cur=root.getAttribute('data-theme');
+    if(!cur){cur=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}
+    var next=cur==='dark'?'light':'dark';
+    root.setAttribute('data-theme',next);
+    try{localStorage.setItem('dm-theme',next);}catch(e){}
+  });
+
+  // ---------- inverted index ----------
+  var DOCS=[
+    {id:2058795,t:'Metamorphosis',x:'Metamorphosis is a biological process. A caterpillar becomes a butterfly through complete metamorphosis.'},
+    {id:4856187,t:'The Metamorphosis',x:'The Metamorphosis is a novella by Franz Kafka. Gregor wakes up transformed into an insect.'},
+    {id:4894872,t:'Butterfly',x:'A butterfly has four life stages: egg, larva, pupa and adult. Butterfly wings are covered in scales.'},
+    {id:12487561,t:'Surfing',x:'Surfing is a surface water sport. Surfing on a surfboard began in Polynesia.'}
+  ];
+  function tok(s){return s.toLowerCase().replace(/[^a-z0-9\s]/g,' ').split(/\s+/).filter(Boolean);}
+  function idx(){
+    var w=tok($('idxInput').value)[0]||'';
+    var found=[];
+    $('idxDocs').innerHTML=DOCS.map(function(d){
+      var words=tok(d.t+' '+d.x), pos=[];
+      words.forEach(function(x,i){ if(w && x===w) pos.push(i+1); });
+      if(pos.length) found.push({d:d,pos:pos});
+      var hi=esc(d.x).replace(new RegExp('\\b('+w.replace(/[^a-z0-9]/g,'')+')\\b','gi'),w?'<mark>$1</mark>':'$1');
+      var ht=esc(d.t).replace(new RegExp('\\b('+w.replace(/[^a-z0-9]/g,'')+')\\b','gi'),w?'<mark>$1</mark>':'$1');
+      return '<div class="doc'+(pos.length?' match':'')+'"><div class="id">docID: '+d.id+'</div><b>'+ht+'</b><div>'+hi+'</div></div>';
+    }).join('');
+    if(!w){ $('idxOut').innerHTML='Type a word to look it up.'; return; }
+    if(!found.length){ $('idxOut').innerHTML='<b>wordID "'+esc(w)+'"</b> → no pages. This word isn\'t in the index, so no page can rank for it.'; return; }
+    $('idxOut').innerHTML='<div style="font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.86rem">'+
+      '<b>word: '+esc(w)+'</b><br>'+found.map(function(f){return '&nbsp;&nbsp;docID:'+f.d.id+' &nbsp;nhits:'+f.pos.length+' &nbsp;positions: '+f.pos.join(', ');}).join('<br>')+'</div>'+
+      '<p style="margin:10px 0 0;font-size:.9rem">One lookup returns every page with the word, without reading the pages again. Next, each page gets a relevance score. Notice that a word in the <b>title</b> gets position 1: early, prominent hits count for more.</p>';
+  }
+  $('idxInput').addEventListener('input',function(){
+    document.querySelectorAll('#idxOpts button').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.w===$('idxInput').value.trim().toLowerCase()));});
+    idx();
+  });
+  $('idxOpts').addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b) return;
+    $('idxInput').value=b.dataset.w; $('idxInput').dispatchEvent(new Event('input'));
+  });
+  idx();
+
+  // ---------- relevance ----------
+  var TYPES=[['URL',100],['Anchor text',90],['Title tag',100],['Plain text, large font',60],['Plain text, medium font',30],['Plain text, small font',10]];
+  var DEF_A=[1,52,1,1,7,37], DEF_B=[1,36,1,1,2,25];
+  var CW=[1,1,.9,.7,.45,.2,.05,.01];
+  var mode='raw';
+  function eff(n){var s=0; for(var i=0;i<Math.min(n,8);i++) s+=CW[i]; return s;}
+  $('relBody').innerHTML=TYPES.map(function(t,i){
+    return '<tr><td>'+t[0]+'</td><td class="num">'+t[1]+'</td><td class="num"><input type="number" min="0" id="ra'+i+'" value="'+DEF_A[i]+'" style="width:80px;text-align:right" aria-label="Metamorphosis '+t[0]+' hits"></td><td class="num"><input type="number" min="0" id="rb'+i+'" value="'+DEF_B[i]+'" style="width:80px;text-align:right" aria-label="The_Metamorphosis '+t[0]+' hits"></td></tr>';
+  }).join('');
+  function relScore(p){
+    var s=0; TYPES.forEach(function(t,i){ var n=Math.max(0,+$('r'+p+i).value||0); s+=t[1]*(mode==='cw'?eff(n):n); }); return Math.round(s);
+  }
+  function rel(){
+    var a=relScore("a"), b=relScore("b");
+    $('relA').textContent=a.toLocaleString(); $('relB').textContent=b.toLocaleString();
+    $('relA').className='num big '+(a>=b?'win':''); $('relB').className='num big '+(b>a?'win':'');
+    var stuffed=(+$("rb5").value)>=100;
+    var msg;
+    if(mode==='raw'){
+      msg='<b>Raw count:</b> every hit adds points. ';
+      if(stuffed) msg+=(b>a?'The stuffed page now <b>wins</b>, just by repeating a word visitors can\'t even see. That is exactly the abuse count-weights were built to stop. Switch them on.':'Stuffing added a lot of points. Switch on count-weights to see what happens.');
+      else msg+='The gap is '+Math.abs(a-b).toLocaleString()+' points, and anchor text drives most of it (52 hits × 90 = 4,680 on the first page). Should 52 links really count 52 times?';
+    } else {
+      msg='<b>With count-weights:</b> past eight hits of a type, extra hits count zero. ';
+      if(stuffed) msg+='The 300 hidden words added nothing at all: small-font hits are capped at about 4.3 effective hits × 10 = 43 points, no matter how many there are. Stuffing no longer works.';
+      else msg+='The gap is now '+Math.abs(a-b).toLocaleString()+' points. 52 anchor hits and 36 anchor hits score the same, since both are capped. The remaining difference is mostly medium-font text.';
+    }
+    $('relMsg').innerHTML=msg;
+  }
+  for(var i=0;i<6;i++){ $('ra'+i).addEventListener('input',rel); $('rb'+i).addEventListener('input',rel); }
+  $('relMode').addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b) return;
+    mode=b.dataset.m; $('relMode').querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed',String(x===b));}); rel();
+  });
+  $('relStuff').addEventListener('click',function(){ $('rb5').value=DEF_B[5]+300; rel(); });
+  $('relReset').addEventListener('click',function(){ for(var i=0;i<6;i++){$('ra'+i).value=DEF_A[i];$('rb'+i).value=DEF_B[i];} rel(); });
+  rel();
+
+  // ---------- keyword map ----------
+  var OPTS=[['','Choose…'],['home','Homepage'],['cat','Category page'],['sub','Subcategory page'],['sup','Supporting term (no own page)'],['skip','Skip']];
+  var KW=[
+    ['office furniture','10K–100K',['home'],'Broad, relevant and describes the whole store. A strong homepage term.'],
+    ['desk','100K–1M',['skip','sup'],'Huge volume, but unclear intent (school desk? dining desk?) and brutal competition.'],
+    ['computer desk','100K–1M',['cat'],'High volume and clearly about office buying. A good term for the Desks category.'],
+    ['office desk','10K–100K',['sup','cat','sub'],'Fits the Desks category. Use it on the same page as "computer desk" rather than splitting it off.'],
+    ['office chair','100K–1M',['cat'],'High volume, clear intent. The obvious term for the Chairs category.'],
+    ['desks','10K–100K',['skip','sup'],'The same search as "desk." Never give it its own page, or the two pages will cannibalize each other.'],
+    ['home office furniture','10K–100K',['home','cat','sup'],'Works as a second homepage phrase or as a category if the store has a home-office section.'],
+    ['corner desk','10K–100K',['sub'],'Specific type of desk. A natural subcategory under Desks.'],
+    ['filing cabinets','100K–1M',['cat'],'High volume and clear intent. The term for the Filing Cabinets category.'],
+    ['home office desk','10K–100K',['sub','sup'],'A specific kind of desk. A subcategory, or a supporting term on the Desks page.'],
+    ['computer table','10K–100K',['sup'],'A synonym for "computer desk." Use it on that page, not a separate one.'],
+    ['desk chair','10K–100K',['sup'],'Too close to "office chair." Use it as a supporting term on the Chairs page.'],
+    ['computer chair','10K–100K',['sup'],'Another near-synonym for "office chair." A supporting term, not a separate page.'],
+    ['small desk','10K–100K',['sub'],'Specific and shopper-friendly. A good subcategory under Desks.'],
+    ['chair','100K–1M',['skip','sup'],'Huge volume, but most "chair" searches aren\'t about office chairs.']
+  ];
+  $('mapBody').innerHTML=KW.map(function(k,i){
+    return '<tr id="mr'+i+'"><td><b>'+k[0]+'</b><div class="fb" id="mf'+i+'"></div></td><td>'+k[1]+'</td><td><select id="ms'+i+'" aria-label="Placement for '+k[0]+'">'+OPTS.map(function(o){return '<option value="'+o[0]+'">'+o[1]+'</option>';}).join('')+'</select></td></tr>';
+  }).join('');
+  function mapCheck(){
+    var right=0, answered=0, pages={};
+    KW.forEach(function(k,i){
+      var v=$('ms'+i).value, row=$('mr'+i), fb=$('mf'+i);
+      row.classList.remove('ok','bad'); fb.textContent='';
+      if(!v) return;
+      answered++;
+      if(k[2].indexOf(v)>-1){ right++; row.classList.add('ok'); }
+      else { row.classList.add('bad'); fb.textContent=k[3]; }
+      if(v==='home'||v==='cat'||v==='sub') pages[k[0]]=v;
+    });
+    var notes=[];
+    if(pages['desk']&&pages['desks']) notes.push('<b>Cannibalization:</b> "desk" and "desks" are the same search, but you gave both their own page.');
+    var chairPages=['office chair','desk chair','computer chair','chair'].filter(function(x){return pages[x];});
+    if(chairPages.length>1) notes.push('<b>Cannibalization:</b> '+chairPages.map(function(x){return '"'+x+'"';}).join(', ')+' would compete with each other. Pick one chair term per page.');
+    var deskPages=['computer desk','computer table'].filter(function(x){return pages[x];});
+    if(deskPages.length>1) notes.push('<b>Cannibalization:</b> "computer desk" and "computer table" are synonyms. Put them on one page.');
+    var homes=KW.filter(function(k,i){return $('ms'+i).value==='home';}).length;
+    if(homes>2) notes.push('<b>Too many homepage terms:</b> a homepage can focus on one main term (two at most).');
+    if(!answered){ $('mapOut').innerHTML='Choose a placement for at least one keyword first.'; return; }
+    $('mapOut').innerHTML='<div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:6px"><span>Defensible choices</span><span class="big">'+right+' / '+answered+'</span></div>'+
+      '<div class="meter"><div style="width:'+Math.round(right/answered*100)+'%"></div></div>'+
+      (notes.length?'<p style="margin:8px 0 0">'+notes.join('<br>')+'</p>':'')+
+      '<p style="margin:8px 0 0;font-size:.9rem;color:var(--muted)">Rows marked in red show a reason. You can disagree: in class, be ready to defend any choice with relevance, traffic, competition and current ranking.</p>';
+  }
+  $('mapCheck').addEventListener('click',mapCheck);
+  $('mapShow').addEventListener('click',function(){ KW.forEach(function(k,i){$('ms'+i).value=k[2][0];}); mapCheck();
+    $('mapOut').innerHTML+='<p style="margin:8px 0 0"><b>Suggested structure:</b> Homepage → "office furniture." Categories → "computer desk," "office chair," "filing cabinets." Desk subcategories → "corner desk," "small desk," "home office desk." Everything else supports one of those pages or is skipped.</p>'; });
+  $('mapReset').addEventListener('click',function(){ KW.forEach(function(k,i){$('ms'+i).value='';$('mr'+i).classList.remove('ok','bad');$('mf'+i).textContent='';}); $('mapOut').innerHTML='Make your choices, then press <b>Check my map</b>.'; });
+
+  // ---------- ranking factor bars ----------
+  var F=[['Domain-level link authority',8.2,1],['Page-level link metrics',8.2,1],['Page-level keyword & content',7.9,0],['Page-level keyword-agnostic features',6.6,0],['User usage & traffic/query data',6.6,0],['Domain-level brand metrics',5.9,0],['Domain-level keyword usage',4.9,0],['Domain-level keyword-agnostic features',4.1,0],['Page-level social metrics',4.0,0]];
+  $('factorBars').innerHTML=F.map(function(f){
+    return '<div class="bar"><span>'+f[0]+'</span><div class="track"><div class="fill'+(f[2]?'':' alt')+'" style="width:'+(f[1]*10)+'%"></div></div><b>'+f[1].toFixed(1)+'</b></div>';
+  }).join('');
+
+  // ---------- SERP preview ----------
+  function trunc(s,n){return s.length>n?s.slice(0,n).replace(/\s+\S*$/,'')+' ...':s;}
+  function bold(s,kw){
+    var out=esc(s); var words=tok(kw).filter(function(w){return w.length>2;});
+    words.forEach(function(w){ out=out.replace(new RegExp('\\b('+w+"[\\w']*)",'gi'),'<b>$1</b>'); });
+    return out;
+  }
+  function serp(){
+    var kw=$('sKw').value, t=$('sTitle').value.trim(), u=$('sUrl').value.trim(), d=$('sDesc').value.trim();
+    var host='', crumbs='';
+    try{ var U=new URL(u); host=U.hostname.replace(/^www\./,''); var parts=U.pathname.split('/').filter(Boolean); crumbs=U.origin.replace(/^https?:\/\/(www\.)?/,'https://www.')+(parts.length?' › '+parts.slice(-2).join(' › '):''); }catch(e){ host=u; crumbs=u; }
+    var name=host?host.split('.')[0]:'site'; name=name.charAt(0).toUpperCase()+name.slice(1);
+    $('serpOut').innerHTML='<div class="site"><div class="fav">'+esc(name.charAt(0))+'</div><div><div class="nm">'+esc(name)+'</div><div class="url">'+esc(crumbs)+'</div></div></div>'+
+      '<div class="t">'+esc(trunc(t||'(no title tag)',60))+'</div><div class="d">'+(d?bold(trunc(d,158),kw):'<i>No meta description. Google will pick text from the page.</i>')+'</div>';
+    function m(id,lid,len,max){ var p=Math.min(100,len/max*100); $(id).querySelector('div').style.width=p+'%'; $(id).classList.toggle('warn',len>max); $(lid).textContent=len+' / '+max; }
+    m('mT','lT',t.length,60); m('mD','lD',d.length,158);
+    var tips=[], kwl=kw.toLowerCase().trim(), kwWords=tok(kw);
+    function has(s){ var l=s.toLowerCase().replace(/'/g,''); return kwWords.every(function(w){return l.indexOf(w)>-1;}); }
+    if(!kwl) tips.push('Enter a target keyword to check placement.');
+    else{
+      tips.push(has(t)?'✓ Keyword is in the title.':'✗ Keyword is missing from the title, the most heavily weighted place.');
+      if(has(t) && t.toLowerCase().replace(/'/g,'').indexOf(kwWords[0])>20) tips.push('• Consider moving the keyword closer to the front of the title.');
+      tips.push(has(u.replace(/[-_\/]/g,' '))?'✓ Keyword is in the URL.':'✗ Keyword is not in the URL.');
+      tips.push(has(d)?'✓ Keyword is in the description (Google bolds it, which draws the eye).':'• Keyword is not in the description. It won\'t be bolded.');
+    }
+    if(t.length>60) tips.push('✗ Title is likely to be cut off.');
+    if(t.length && t.length<25) tips.push('• Title is short. There\'s room for a benefit or the brand.');
+    if(d.length>158) tips.push('✗ Description is likely to be cut off.');
+    if(d.length && d.length<70) tips.push('• Description is short. Say why someone should click.');
+    $('serpMsg').innerHTML=tips.join('<br>');
+  }
+  ['sKw','sTitle','sUrl','sDesc'].forEach(function(id){$(id).addEventListener('input',serp);});
+  serp();
+
+  // ---------- quiz ----------
+  var Q=[
+    ['In the search-engine model from this chapter, what is a "hit"?',['A visit to a web page','One occurrence of a word on a page','A link from another website','A click on a search result'],1,'A hit is a single word occurrence, recorded with details like capitalization, font size and position. It is not a page view.'],
+    ['Why does the search engine re-sort hit lists by word ID?',['To save storage space','So it can quickly find every page that contains a searched word','To remove duplicate pages','To calculate PageRank'],1,'A list sorted by page can\'t answer "which pages contain this word?" Sorting by word creates an inverted index that can.'],
+    ['In the textbook\'s relevance weights, which placement of a keyword counts the MOST?',['Small body text','Medium body text','The title tag','Large body text'],2,'The URL and title tag are weighted 100, compared with 10–60 for plain text.'],
+    ['What problem do count-weights solve?',['Slow page loading','Keyword stuffing: repeating a word to inflate the score','Broken links','Duplicate content across sites'],1,'Count-weights reduce the value of each extra hit, and from the ninth hit on, extra hits count zero. Repeating a keyword stops paying off.'],
+    ['Why is it easier to rank for "butterfly metamorphosis" than for "metamorphosis"?',['Google prefers longer queries','Fewer pages match the whole phrase, so there\'s less competition','Two-word searches have more traffic','Multi-word searches ignore links'],1,'Long-tail phrases have less competition, which makes them the best target for new and small sites.'],
+    ['Which is NOT one of the six places a keyword should appear?',['Title tag','Alt text','Meta keywords tag','Anchor text'],2,'The six are URL, title tag, header tags, main content, alt text and anchor text. Google has ignored the meta keywords tag for years.'],
+    ['A site creates separate pages targeting "desk" and "desks." What is the problem?',['Keyword cannibalization: the two pages compete for the same search','The URLs will be too long','"Desks" has no search volume','Nothing, this is best practice'],0,'Each page should target a different term. Two pages on the same search split the signals and compete with each other.'],
+    ['Where should a broad "fat head" keyword like "office furniture" be mapped?',['A product page','A blog post','The homepage or a high-level category page','It should never be mapped'],2,'Broad, high-volume terms go higher in the site hierarchy. Specific long-tail terms go on product pages.'],
+    ['What is an orphan page?',['A page with no internal links pointing to it','A page with no images','A page that loads slowly','A page with no title tag'],0,'If nothing links to a page, crawlers may never find it, and Google has no signal that it matters.'],
+    ['For a local business, NAP consistency means keeping what identical across the web?',['Navigation, About page and Pricing','Name, Address and Phone number','New products, Articles and Promotions','Number of reviews, Average rating and Photos'],1,'Matching name, address and phone on your site, Google Business Profile and directories helps Google trust your local listing.']
+  ];
+  var score=0,done=0;
+  function buildQuiz(){
+    score=0;done=0;
+    $('quizBox').innerHTML=Q.map(function(q,i){
+      return '<div class="q" data-i="'+i+'"><p class="stem">'+(i+1)+'. '+q[0]+'</p><div class="choices">'+q[1].map(function(c,j){return '<button type="button" class="c" data-j="'+j+'">'+c+'</button>';}).join('')+'</div><div class="exp">'+q[3]+'</div></div>';
+    }).join('');
+    $('qTotal').textContent=Q.length; upd();
+  }
+  function upd(){$('qScore').textContent=score;$('qDone').textContent=done;}
+  $('quizBox').addEventListener('click',function(e){
+    var b=e.target.closest('button.c'); if(!b) return;
+    var box=b.closest('.q'); if(box.classList.contains('done')) return;
+    var q=Q[+box.dataset.i], j=+b.dataset.j;
+    box.querySelectorAll('button.c').forEach(function(x,k){x.disabled=true; if(k===q[2]) x.classList.add('right');});
+    if(j===q[2]) score++; else b.classList.add('wrong');
+    box.classList.add('done'); done++; upd();
+  });
+  $('qReset').addEventListener('click',function(){buildQuiz(); $('quiz').scrollIntoView();});
+  buildQuiz();
+})();
+</script>
+</body>
+</html>
